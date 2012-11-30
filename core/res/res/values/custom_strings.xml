@@ -61,4 +61,8 @@
     <string name="app_killed_message"><xliff:g id="string">%s</xliff:g> killed</string>
     <string name="no_app_killed_message">Nothing to kill</string>
 
+	<!-- Allow camera to use power key as shutter -->
+    <string name="permlab_preventpower">override power key</string>
+    <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+    <string name="permdesc_preventpower">Allows an app to override the power key.</string>
 </resources>
