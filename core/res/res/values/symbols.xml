@@ -2838,4 +2838,7 @@
   <java-symbol type="bool" name="use_lock_pattern_drawable" />
   <java-symbol type="drawable" name="lockscreen_notselected" />
   <java-symbol type="drawable" name="lockscreen_selected" />
+
+  <!-- Gesture Sensor -->
+  <java-symbol type="bool" name="config_enableGestureService" />
 </resources>
