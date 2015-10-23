@@ -28,4 +28,24 @@
     <!-- Default button brightness setting.
          Must be in the range specified by minimum and maximum. -->
     <integer name="config_buttonBrightnessSettingDefault">255</integer>
+
+    <!-- Button to reboot the phone, within the Phone Options dialog -->
+    <string name="reboot_system" product="tablet">Reboot tablet</string>
+    <string name="reboot_system" product="default">Reboot phone</string>
+
+    <!-- Button to reboot the phone, within the Reboot Options dialog -->
+    <string name="reboot_reboot">Reboot</string>
+    <!-- Button to reboot the phone into recovery, within the Reboot Options dialog -->
+    <string name="reboot_recovery">Recovery</string>
+    <!-- Button to reboot the phone into bootloader, within the Reboot Options dialog -->
+    <string name="reboot_bootloader">Bootloader</string>
+    <!-- Button to reboot the phone into bootmenu, within the Reboot Options dialog -->
+    <string name="reboot_bootmenu">Bootmenu</string>
+    <!-- Button to reboot the phone into fastboot, within the Reboot Options dialog -->
+    <string name="reboot_fastboot">Fastboot</string>
+    <!-- Button to reboot the phone into download, within the Reboot Options dialog -->
+    <string name="reboot_download">Download</string>
+
+    <!-- screenshot in the power menu -->
+    <string name="powermenu_screenshot">Screenshot</string>
 </resources>
