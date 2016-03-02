@@ -61,4 +61,8 @@
 
     <java-symbol type="drawable" name="ic_lock_power_screenrecord" />
     <java-symbol type="string" name="powermenu_screenrecord" />
+
+    <!-- Powermenu Torch -->
+    <java-symbol type="drawable" name="ic_lock_torch" />
+    <java-symbol type="string" name="global_action_torch" />
 </resources>

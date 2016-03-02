@@ -3620,6 +3620,13 @@ public final class Settings {
         public static final String POWERMENU_SCREENRECORD = "powermenu_screenrecord";
 
         /**
+         * Whether to display the torch option in the power menu
+         *
+         * @hide
+         */
+        public static final String POWERMENU_TORCH = "powermenu_torch";
+
+        /**
          * Value for button brightness.
          * This is an integer value in a range between 0 and 255.
          *      0 = off
