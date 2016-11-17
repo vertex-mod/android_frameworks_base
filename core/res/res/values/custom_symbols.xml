@@ -88,4 +88,7 @@
     <java-symbol type="string" name="app_killed_message" />
     <java-symbol type="string" name="no_app_killed_message" />
     <java-symbol type="integer" name="config_backKillTimeout" />
+
+    <!-- config softap extention feature -->
+    <java-symbol type="bool" name="config_softap_extention" />
 </resources>
