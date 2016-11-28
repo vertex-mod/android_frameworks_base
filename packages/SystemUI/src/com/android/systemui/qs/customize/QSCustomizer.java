@@ -203,16 +203,20 @@ public class QSCustomizer extends LinearLayout implements OnMenuItemClickListene
                 reset();
                 break;
             case R.id.menu_item_columns_three:
-                Settings.System.putInt(mContext.getContentResolver(),
-                        Settings.System.QS_LAYOUT_COLUMNS, 3);
+                Settings.System.putIntForUser(mContext.getContentResolver(),
+                        Settings.System.QS_LAYOUT_COLUMNS, 3, UserHandle.USER_CURRENT);
                 break;
             case R.id.menu_item_columns_four:
-                Settings.System.putInt(mContext.getContentResolver(),
-                        Settings.System.QS_LAYOUT_COLUMNS, 4);
+                Settings.System.putIntForUser(mContext.getContentResolver(),
+                        Settings.System.QS_LAYOUT_COLUMNS, 4, UserHandle.USER_CURRENT);
                 break;
             case R.id.menu_item_columns_five:
-                Settings.System.putInt(mContext.getContentResolver(),
-                        Settings.System.QS_LAYOUT_COLUMNS, 5);
+                Settings.System.putIntForUser(mContext.getContentResolver(),
+                        Settings.System.QS_LAYOUT_COLUMNS, 5, UserHandle.USER_CURRENT);
+                break;
+            case R.id.menu_item_columns_six:
+                Settings.System.putIntForUser(mContext.getContentResolver(),
+                        Settings.System.QS_LAYOUT_COLUMNS, 6, UserHandle.USER_CURRENT);
                 break;
             case R.id.menu_item_titles:
                 item.setChecked(!item.isChecked());
@@ -231,8 +235,8 @@ public class QSCustomizer extends LinearLayout implements OnMenuItemClickListene
             tiles.add(tile);
         }
         mTileAdapter.setTileSpecs(tiles);
-        Settings.System.putInt(mContext.getContentResolver(),
-                Settings.System.QS_LAYOUT_COLUMNS, mDefaultColumns);
+        Settings.System.putIntForUser(mContext.getContentResolver(),
+                Settings.System.QS_LAYOUT_COLUMNS, mDefaultColumns, UserHandle.USER_CURRENT);
     }
 
     private void setTileSpecs() {
