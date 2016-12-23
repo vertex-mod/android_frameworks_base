@@ -85,6 +85,12 @@ public class CellularTile extends QSTile<QSTile.SignalState> {
     }
 
     @Override
+    protected void handleSecondaryClick() {
+        // Secondary clicks are header clicks, just toggle.
+        mDataController.setMobileDataEnabled(!mDataController.isMobileDataEnabled());
+    }
+
+    @Override
     protected void handleClick() {
         MetricsLogger.action(mContext, getMetricsCategory());
         if (mDataController.isMobileDataSupported()) {
