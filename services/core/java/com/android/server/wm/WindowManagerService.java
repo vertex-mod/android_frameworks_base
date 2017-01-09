@@ -6173,7 +6173,7 @@ public class WindowManagerService extends IWindowManager.Stub
 
     private void writeState(String path) {
         final String value = Integer.toString(Settings.Secure.getInt(
-                mContext.getContentResolver(), Settings.Secure.SRGB_ENABLED, 0));
+                mContext.getContentResolver(), Settings.Secure.SRGB_ENABLED, 1));
         try {
             final File file = new File(path);
             final FileOutputStream fos = new FileOutputStream(file);
