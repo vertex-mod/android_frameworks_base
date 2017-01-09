@@ -72,6 +72,14 @@ public class LocationTile extends QSTile<QSTile.BooleanState> {
     }
 
     @Override
+    protected void handleSecondaryClick() {
+        // Secondary clicks are header clicks, just toggle.
+        final boolean wasEnabled = (Boolean) mState.value;
+        MetricsLogger.action(mContext, getMetricsCategory(), !wasEnabled);
+        mController.setLocationEnabled(!wasEnabled);
+    }
+
+    @Override
     protected void handleClick() {
         if (mKeyguard.isSecure() && mKeyguard.isShowing()) {
             mHost.startRunnableDismissingKeyguard(new Runnable() {
