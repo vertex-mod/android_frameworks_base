@@ -3620,6 +3620,12 @@ public final class Settings {
         public static final String POWERMENU_SCREENRECORD = "powermenu_screenrecord";
 
         /**
+         * Number of qs columns on landscape orientation
+         * @hide
+         */
+        public static final String QS_LAYOUT_COLUMNS_LANDSCAPE = "qs_layout_columns_landscape";
+
+        /**
          * Whether to display the torch option in the power menu
          *
          * @hide
