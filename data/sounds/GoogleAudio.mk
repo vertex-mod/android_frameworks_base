@@ -98,4 +98,6 @@ PRODUCT_COPY_FILES += \
     $(LOCAL_PATH)material/ringtones/Titania.ogg:system/media/audio/ringtones/Titania.ogg \
     $(LOCAL_PATH)material/ringtones/Triton.ogg:system/media/audio/ringtones/Triton.ogg \
     $(LOCAL_PATH)material/ringtones/Umbriel.ogg:system/media/audio/ringtones/Umbriel.ogg \
-    $(LOCAL_PATH)material/ringtones/Zen.ogg:system/media/audio/ringtones/Zen.ogg
+
+# Include additional Pixel effect sounds from AudioPackage13_48.mk
+-include AudioPackage13_48.mk
