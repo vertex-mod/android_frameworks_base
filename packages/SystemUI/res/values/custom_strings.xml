@@ -96,4 +96,7 @@
         <item quantity="one">%1$d client</item>
         <item quantity="other">%1$d clients</item>
     </plurals>
+
+    <!-- volte icon switch -->
+    <string name="status_bar_volte">VoLTE</string>
 </resources>

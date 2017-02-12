@@ -212,7 +212,7 @@ public class CellularTile extends QSTile<QSTile.SignalState> {
                 int qsType, boolean activityIn, boolean activityOut, int dataActivityId,
                 int mobileActivityId, int stackedDataIcon, int stackedVoiceIcon,
                 String typeContentDescription, String description, boolean isWide, int subId,
-                boolean roaming) {
+                boolean roaming, boolean isMobileIMS) {
             if (qsIcon == null) {
                 // Not data sim, don't display.
                 return;
