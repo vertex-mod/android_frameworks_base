@@ -17,10 +17,6 @@
 */
 -->
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
-    <!-- Package Manager -->
-    <java-symbol type="array" name="config_disabledComponents" />
-    <java-symbol type="array" name="config_forceEnabledComponents" />
-
-    <!-- Whether device has dash charging support -->
-    <java-symbol type="bool" name="config_hasDashCharger" />
+    <!-- Whether device has DASH charging support -->
+    <bool name="config_hasDashCharger">false</bool>
 </resources>
