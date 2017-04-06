@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
     Copyright (C) 2016 The CyanogenMod Project
-    Copyright (C) 2016 The Paranoid Android Project
+    Copyright (C) 2016 The ParanoidAndroid Project
 
     Licensed under the Apache License, Version 2.0 (the "License");
     you may not use this file except in compliance with the License.
@@ -15,17 +15,10 @@
     See the License for the specific language governing permissions and
     limitations under the License.
 -->
-<vector xmlns:android="http://schemas.android.com/apk/res/android"
-    android:width="24dp"
-    android:height="24dp"
-    android:viewportWidth="24"
-    android:viewportHeight="24">
-
-    <!-- Path will be tinted based on battery level -->
-    <path
-        android:name="battery_level"
-        android:strokeColor="#000000"
-        android:strokeLineJoin="round"
-        android:strokeWidth="3"
-        android:pathData="@string/battery_circle_path" />
-</vector>
+<objectAnimator
+  xmlns:android="http://schemas.android.com/apk/res/android"
+  android:interpolator="@android:interpolator/linear"
+  android:propertyName="pathData"
+  android:valueFrom="@string/battery_solid_empty"
+  android:valueTo="@string/battery_solid_full"
+  android:valueType="pathType"/>

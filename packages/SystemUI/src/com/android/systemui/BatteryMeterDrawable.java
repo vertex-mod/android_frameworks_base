@@ -58,6 +58,7 @@ public class BatteryMeterDrawable extends Drawable implements
     // Values for the different battery styles
     public static final int BATTERY_STYLE_PORTRAIT  = 0;
     public static final int BATTERY_STYLE_CIRCLE    = 2;
+    public static final int BATTERY_STYLE_SOLID     = 7;
     public static final int BATTERY_STYLE_HIDDEN    = 4;
     public static final int BATTERY_STYLE_TEXT      = 5;
 
@@ -247,7 +248,7 @@ public class BatteryMeterDrawable extends Drawable implements
 
     private void startChargingAnimation(final int repeat) {
         if (mLevelAlpha == 0 || mAnimator != null
-                || mStyle != BATTERY_STYLE_CIRCLE) {
+                || mStyle != BATTERY_STYLE_SOLID) {
             return;
         }
         final int defaultAlpha = mLevelAlpha;
@@ -473,6 +474,8 @@ public class BatteryMeterDrawable extends Drawable implements
                 return R.drawable.ic_battery_circle;
             case BATTERY_STYLE_PORTRAIT:
                 return R.drawable.ic_battery_portrait;
+            case BATTERY_STYLE_SOLID:
+                return R.drawable.ic_battery_solid;
             default:
                 return 0;
         }
@@ -484,6 +487,8 @@ public class BatteryMeterDrawable extends Drawable implements
                 return R.style.BatteryMeterViewDrawable_Circle;
             case BATTERY_STYLE_PORTRAIT:
                 return R.style.BatteryMeterViewDrawable_Portrait;
+            case BATTERY_STYLE_SOLID:
+                return R.style.BatteryMeterViewDrawable_Solid;
             default:
                 return R.style.BatteryMeterViewDrawable;
         }
