@@ -186,7 +186,7 @@ public final class PowerManagerService extends SystemService
     private static final int BUTTON_ON_DURATION = 5000;
     //
     // Power feature to Enable High Brightness Mode
-    private static final int POWER_FEATURE_HIGH_BRIGHTNESS_MODE = 1;
+    private static final int POWER_FEATURE_HIGH_BRIGHTNESS_MODE = 50;
 
     // Default setting for High Brightness Mode.
     private static final int DEFAULT_HIGH_BRIGHTNESS_MODE = 0;
