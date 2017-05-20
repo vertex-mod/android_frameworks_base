@@ -29,7 +29,6 @@ import com.android.internal.app.IVoiceInteractor;
 import com.android.internal.app.ProcessMap;
 import com.android.internal.app.SystemUserHomeActivity;
 import com.android.internal.app.procstats.ProcessStats;
-import com.android.internal.app.ActivityTrigger;
 import com.android.internal.os.BackgroundThread;
 import com.android.internal.os.BatteryStatsImpl;
 import com.android.internal.os.IResultReceiver;
@@ -151,8 +150,6 @@ import android.graphics.Bitmap;
 import android.graphics.Point;
 import android.graphics.Rect;
 import android.location.LocationManager;
-import android.net.ConnectivityManager;
-import android.net.NetworkInfo;
 import android.net.Proxy;
 import android.net.ProxyInfo;
 import android.net.Uri;
@@ -560,9 +557,6 @@ public final class ActivityManagerService extends ActivityManagerNative
     static final int START_PROCESS = 1;
     static final int NETWORK_OPTS = 2;
     static final int ANIMATION_SCALE = 3;
-    int mActiveNetType = -1;
-    Object mNetLock = new Object();
-    ConnectivityManager mConnectivityManager;
 
     /** All system services */
     SystemServiceManager mSystemServiceManager;
@@ -1566,7 +1560,6 @@ public final class ActivityManagerService extends ActivityManagerNative
     static final int NOTIFY_ACTIVITY_DISMISSING_DOCKED_STACK_MSG = 68;
     static final int SHOW_UNSUPPORTED_DISPLAY_SIZE_DIALOG_MSG = 69;
     static final int NOTIFY_VR_SLEEPING_MSG = 70;
-    static final int NETWORK_OPTS_CHECK_MSG = 71;
 
     static final int FIRST_ACTIVITY_STACK_MSG = 100;
     static final int FIRST_BROADCAST_QUEUE_MSG = 200;
@@ -1575,7 +1568,6 @@ public final class ActivityManagerService extends ActivityManagerNative
 
     static ServiceThread sKillThread = null;
     static KillHandler sKillHandler = null;
-    static final ActivityTrigger mActivityTrigger = new ActivityTrigger();
 
     CompatModeDialog mCompatModeDialog;
     UnsupportedDisplaySizeDialog mUnsupportedDisplaySizeDialog;
@@ -1590,9 +1582,6 @@ public final class ActivityManagerService extends ActivityManagerNative
     // Enable B-service aging propagation on memory pressure.
     boolean mEnableBServicePropagation =
             SystemProperties.getBoolean("ro.sys.fw.bservice_enable", false);
-
-    static final boolean mEnableNetOpts =
-            SystemProperties.getBoolean("persist.netopts.enable",false);
 
     /**
      * Flag whether the current user is a "monkey", i.e. whether
@@ -2399,23 +2388,6 @@ public final class ActivityManagerService extends ActivityManagerNative
             } case NOTIFY_VR_SLEEPING_MSG: {
                 notifyVrManagerOfSleepState(msg.arg1 != 0);
             } break;
-            case NETWORK_OPTS_CHECK_MSG: {
-                int flag = msg.arg1;
-                String packageName = (String)msg.obj;
-                if (flag == 0) {
-                    if (mActivityTrigger != null) {
-                        synchronized (mNetLock) {
-                            if (mActiveNetType >= 0) {
-                                mActivityTrigger.activityMiscTrigger(NETWORK_OPTS, packageName, mActiveNetType, 0);
-                                return;
-                            }
-                        }
-                    }
-                }
-                if (mActivityTrigger != null) {
-                    mActivityTrigger.activityMiscTrigger(NETWORK_OPTS, packageName, ConnectivityManager.TYPE_NONE, 1);
-                }
-            } break;
             }
         }
     };
@@ -3022,11 +2994,6 @@ public final class ActivityManagerService extends ActivityManagerNative
         return mAppBindArgs;
     }
 
-    private final void networkOptsCheck(int flag, String packageName) {
-        mHandler.sendMessage(
-            mHandler.obtainMessage(NETWORK_OPTS_CHECK_MSG, flag, 0, packageName));
-    }
-
     boolean setFocusedActivityLocked(ActivityRecord r, String reason) {
         if (r == null || mFocusedActivity == r) {
             return false;
@@ -3046,10 +3013,6 @@ public final class ActivityManagerService extends ActivityManagerNative
 
         final ActivityRecord last = mFocusedActivity;
         mFocusedActivity = r;
-        if (mEnableNetOpts) {
-                networkOptsCheck(0, r.processName);
-        }
-
         if (r.task.isApplicationTask()) {
             if (mCurAppTimeTracker != r.appTimeTracker) {
                 // We are switching app tracking.  Complete the current one.
@@ -3939,9 +3902,6 @@ public final class ActivityManagerService extends ActivityManagerNative
                 }
             }
             checkTime(startTime, "startProcess: done updating pids map");
-            if ("activity".equals(hostingType) || "service".equals(hostingType)) {
-                mActivityTrigger.activityMiscTrigger(START_PROCESS, app.processName, startResult.pid, 0);
-            }
         } catch (RuntimeException e) {
             Slog.e(TAG, "Failure starting process " + app.processName, e);
 
@@ -5307,9 +5267,6 @@ public final class ActivityManagerService extends ActivityManagerNative
                 Slog.i(TAG, "Process " + app.processName + " (pid " + pid
                         + ") has died");
                 mAllowLowerMemLevel = true;
-                if (mEnableNetOpts) {
-                    networkOptsCheck(1, app.processName);
-                }
             } else {
                 // Note that we always want to do oom adj to update our state with the
                 // new number of procs.
@@ -6922,42 +6879,6 @@ public final class ActivityManagerService extends ActivityManagerNative
                 }
             }
         }, dumpheapFilter);
-
-        if (mEnableNetOpts) {
-            IntentFilter netInfoFilter = new IntentFilter();
-            netInfoFilter.addAction(ConnectivityManager.CONNECTIVITY_ACTION);
-            mContext.registerReceiver(new BroadcastReceiver() {
-                @Override
-                public void onReceive(Context context, Intent intent) {
-                    if (mConnectivityManager != null) {
-                        NetworkInfo netInfo = mConnectivityManager.getActiveNetworkInfo();
-                        synchronized(mNetLock) {
-                            mActiveNetType = (netInfo != null) ? netInfo.getType() : -1;
-                        }
-                    }
-                    ActivityStack stack = mStackSupervisor.getLastStack();
-                    if (stack != null) {
-                        ActivityRecord r = stack.topRunningActivityLocked();
-                        if (r != null) {
-                            PowerManager powerManager =
-                                (PowerManager)mContext.getSystemService(Context.POWER_SERVICE);
-                            if (powerManager != null && powerManager.isInteractive()) {
-                                networkOptsCheck(0, r.processName);
-                            }
-                        }
-                    }
-                }
-            }, netInfoFilter);
-            mConnectivityManager = (ConnectivityManager)mContext.getSystemService(Context.CONNECTIVITY_SERVICE);
-            if (mConnectivityManager != null) {
-                NetworkInfo netInfo = mConnectivityManager.getActiveNetworkInfo();
-                if (netInfo != null) {
-                    synchronized (mNetLock) {
-                        mActiveNetType = netInfo.getType();
-                    }
-                }
-            }
-        }
 
         // Let system services know.
         mSystemServiceManager.startBootPhase(SystemService.PHASE_BOOT_COMPLETED);
@@ -22142,15 +22063,6 @@ public final class ActivityManagerService extends ActivityManagerNative
             synchronized (ActivityManagerService.this) {
                 SleepTokenImpl token = new SleepTokenImpl(tag);
                 mSleepTokens.add(token);
-                if (mEnableNetOpts) {
-                    ActivityStack stack = mStackSupervisor.getLastStack();
-                    if (stack != null) {
-                        ActivityRecord r = stack.topRunningActivityLocked();
-                        if (r != null) {
-                            networkOptsCheck(1, r.processName);
-                        }
-                    }
-                }
                 updateSleepIfNeededLocked();
                 return token;
             }
@@ -22317,15 +22229,6 @@ public final class ActivityManagerService extends ActivityManagerNative
         public void release() {
             synchronized (ActivityManagerService.this) {
                 if (mSleepTokens.remove(this)) {
-                    if (mEnableNetOpts) {
-                        ActivityStack stack = mStackSupervisor.getLastStack();
-                        if (stack != null) {
-                            ActivityRecord r = stack.topRunningActivityLocked();
-                            if (r != null) {
-                                networkOptsCheck(0, r.processName);
-                            }
-                        }
-                    }
                     updateSleepIfNeededLocked();
                 }
             }
