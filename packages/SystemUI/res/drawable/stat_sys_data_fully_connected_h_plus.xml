@@ -28,15 +28,14 @@
   IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 -->
 <vector xmlns:android="http://schemas.android.com/apk/res/android"
-    android:width="15dp"
-    android:height="13.5dp"
-    android:viewportWidth="30"
-    android:viewportHeight="27">
-
+        android:width="8.454dp"
+        android:height="17dp"
+        android:viewportWidth="8.454"
+        android:viewportHeight="17">
     <path
-        android:fillColor="#FFFFFF"
-        android:pathData="M10.099,13.902H7.953V9.339H4.774v4.563H2.621V3.238h2.153v4.313h3.179V3.238h2.146V13.902z" />
+        android:fillColor="#FFFFFFFF"
+        android:pathData="M4.25,7.792H3.117V5.313H1.204v2.479H0V1.771h1.204v2.621h1.912V1.771H4.25V7.792Z" />
     <path
-        android:fillColor="#FFFFFF"
-        android:pathData="M18.684,7.645h2.969v1.734h-2.969v3.383h-1.845V9.379h-2.984V7.645h2.984V4.48h1.845V7.645z" />
+        android:fillColor="#FFFFFFFF"
+        android:pathData="M8.454,2.975H7.25V1.771H6.117v1.204H4.912v1.133h1.205v1.205H7.25V4.108h1.204V2.975Z" />
 </vector>
