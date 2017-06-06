@@ -786,7 +786,7 @@ class GlobalActions implements DialogInterface.OnDismissListener, DialogInterfac
                         msg.arg1 = msg.arg2 = 0;
 
                         try {
-                            Thread.sleep(1000);
+                            Thread.sleep(300);
                         } catch (InterruptedException ie) {
                         }
 
