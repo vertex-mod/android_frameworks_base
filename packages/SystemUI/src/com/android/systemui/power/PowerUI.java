@@ -70,6 +70,11 @@ public class PowerUI extends SystemUI {
     private int mNumTemps;
     private long mNextLogTime;
 
+    private Notifier mNotifier;
+
+    // For filtering ACTION_POWER_DISCONNECTED on boot
+    boolean mIgnoreFirstPowerEvent = true;
+
     public void start() {
         mPowerManager = (PowerManager) mContext.getSystemService(Context.POWER_SERVICE);
         mHardwarePropertiesManager = (HardwarePropertiesManager)
@@ -153,6 +158,8 @@ public class PowerUI extends SystemUI {
             filter.addAction(Intent.ACTION_USER_SWITCHED);
             filter.addAction(PowerManager.ACTION_POWER_SAVE_MODE_CHANGING);
             filter.addAction(PowerManager.ACTION_POWER_SAVE_MODE_CHANGED);
+            filter.addAction(Intent.ACTION_POWER_CONNECTED);
+            filter.addAction(Intent.ACTION_POWER_DISCONNECTED);
             mContext.registerReceiver(this, filter, null, mHandler);
         }
 
@@ -172,6 +179,10 @@ public class PowerUI extends SystemUI {
 
                 final boolean plugged = mPlugType != 0;
                 final boolean oldPlugged = oldPlugType != 0;
+
+                if (mIgnoreFirstPowerEvent && plugged) {
+                    mIgnoreFirstPowerEvent = false;
+                }
 
                 int oldBucket = findBatteryLevelBucket(oldBatteryLevel);
                 int bucket = findBatteryLevelBucket(mBatteryLevel);
@@ -220,6 +231,16 @@ public class PowerUI extends SystemUI {
                 mScreenOffTime = -1;
             } else if (Intent.ACTION_USER_SWITCHED.equals(action)) {
                 mWarnings.userSwitched();
+            } else if (Intent.ACTION_POWER_CONNECTED.equals(action)
+                    || Intent.ACTION_POWER_DISCONNECTED.equals(action)) {
+                final ContentResolver cr = mContext.getContentResolver();
+
+                if (mIgnoreFirstPowerEvent) {
+                    mIgnoreFirstPowerEvent = false;
+                } else {
+                        mNotifier.onWirelessChargingStarted();
+                    }
+                }
             } else {
                 Slog.w(TAG, "unknown intent: " + intent);
             }
