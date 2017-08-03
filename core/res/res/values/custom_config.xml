@@ -83,4 +83,8 @@
     <!-- High Brightness Mode -->
     <add-resource type="bool" name="config_supportHighBrightness"></add-resource>
     <bool name="config_supportHighBrightness">false</bool>
+
+    <!-- If enabled, capacitive keys will only light up when pressed.
+         Otherwise, the buttons will light up whenever the user interacts with the device -->
+    <bool name="config_buttonLightOnKeypressOnly">false</bool>
 </resources>

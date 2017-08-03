@@ -220,6 +220,8 @@ public final class PowerManagerService extends SystemService
 
     private int mEvent;
 
+    private boolean mButtonLightOnKeypressOnly = false;
+
     private final Object mLock = new Object();
 
     // A bitfield that indicates what parts of the power state have
@@ -824,6 +826,8 @@ public final class PowerManagerService extends SystemService
         }
         mSupportsHighBrightnessModeConfig = resources.getBoolean(
                 com.android.internal.R.bool.config_supportHighBrightness);
+        mButtonLightOnKeypressOnly = resources.getBoolean(
+                com.android.internal.R.bool.config_buttonLightOnKeypressOnly);
     }
 
     private void updateSettingsLocked() {
@@ -1313,7 +1317,7 @@ public final class PowerManagerService extends SystemService
                 return false;
             }
 
-            if ((event & PowerManager.USER_ACTIVITY_EVENT_BUTTON) != 0) {
+            if (mButtonLightOnKeypressOnly && (event & PowerManager.USER_ACTIVITY_EVENT_BUTTON) != 0) {
                 mLastButtonActivityTime = eventTime;
             }
 

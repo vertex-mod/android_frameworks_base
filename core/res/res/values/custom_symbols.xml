@@ -91,4 +91,7 @@
 
     <!-- High Brightness Mode -->
     <java-symbol type="bool" name="config_supportHighBrightness" />
+
+    <!-- Whether light up buttons only when pressed -->
+    <java-symbol type="bool" name="config_buttonLightOnKeypressOnly" />
 </resources>
