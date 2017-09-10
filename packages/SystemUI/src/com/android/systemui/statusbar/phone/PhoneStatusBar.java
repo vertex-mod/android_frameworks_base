@@ -386,7 +386,6 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
 
     // settings
     private QSPanel mQSPanel;
-
     private boolean mShow4G;
 
     // top bar
@@ -512,11 +511,9 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
                 updateClearAll();
                 updateEmptyShadeView();
             }
-
             update();
         }
 
-        @Override
         public void update() {
             ContentResolver resolver = mContext.getContentResolver();
             int mode = Settings.System.getIntForUser(mContext.getContentResolver(),
@@ -531,7 +528,6 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
             if (mHeader != null) {
                 mHeader.updateSettings();
             }
-
             boolean mShow4G = Settings.System.getIntForUser(resolver,
                     Settings.System.SHOW_FOURG, 0, UserHandle.USER_CURRENT) == 1;
         }
