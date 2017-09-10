@@ -131,9 +131,6 @@
     <integer name="quick_settings_brightness_dialog_short_timeout">2000</integer>
     <integer name="quick_settings_brightness_dialog_long_timeout">4000</integer>
 
-    <!-- Should "4G" be shown instead of "LTE" when the network is NETWORK_TYPE_LTE? -->
-    <bool name="config_show4GForLTE">true</bool>
-
     <!-- Whether or not we also show rsrp level for LTE. -->
     <bool name="config_showRsrpSignalLevelforLTE">false</bool>
 
@@ -369,5 +366,4 @@
     <!-- Temp at which to show a warning notification if config_showTemperatureWarning is true.
          If < 0, uses the value from HardwarePropertiesManager#getDeviceTemperatures. -->
     <integer name="config_warningTemperature">-1</integer>
-
 </resources>
