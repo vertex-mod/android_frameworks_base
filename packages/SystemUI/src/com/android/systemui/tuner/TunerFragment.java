@@ -18,6 +18,7 @@ package com.android.systemui.tuner;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.DialogFragment;
+import android.content.ContentResolver;
 import android.content.DialogInterface;
 import android.database.ContentObserver;
 import android.net.Uri;
@@ -29,6 +30,7 @@ import android.support.v14.preference.PreferenceFragment;
 import android.support.v14.preference.SwitchPreference;
 import android.support.v7.preference.Preference;
 import android.support.v7.preference.Preference.OnPreferenceChangeListener;
+import android.support.v7.preference.PreferenceScreen;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -51,13 +53,25 @@ public class TunerFragment extends PreferenceFragment {
 
     private static final String BLUETOOTH_SHOW_BATTERY = "bluetooth_show_battery";
 
+    private static final String SHOW_FOURG = "show_fourg";
+
     private SwitchPreference mBluetoothBattery;
+
+    private SwitchPreference mShowFourG;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         setHasOptionsMenu(true);
+
+        PreferenceScreen prefSet = getPreferenceScreen();
+
+        final ContentResolver resolver = getActivity().getContentResolver();
+
+        mShowFourG = (SwitchPreference) findPreference(SHOW_FOURG);
+        mShowFourG.setChecked((Settings.System.getInt(resolver,
+                Settings.System.SHOW_FOURG, 0) == 1));
 
         mBluetoothBattery = (SwitchPreference) findPreference(BLUETOOTH_SHOW_BATTERY);
         mBluetoothBattery.setChecked((Settings.System.getInt(getActivity().getContentResolver(),
@@ -137,7 +151,13 @@ public class TunerFragment extends PreferenceFragment {
     }
 
     public boolean onPreferenceTreeClick(Preference preference) {
-        if  (preference == mBluetoothBattery) {
+        if  (preference == mShowFourG) {
+            boolean checked = ((SwitchPreference)preference).isChecked();
+            Settings.System.putInt(getActivity().getContentResolver(),
+                    Settings.System.SHOW_FOURG, checked ? 1:0);
+            return true;
+        } else if 
+            (preference == mBluetoothBattery) {
             boolean checked = ((SwitchPreference)preference).isChecked();
             Settings.System.putInt(getActivity().getContentResolver(),
                     Settings.System.BLUETOOTH_SHOW_BATTERY, checked ? 1:0);
