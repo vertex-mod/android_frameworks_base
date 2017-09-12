@@ -387,6 +387,8 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
     // settings
     private QSPanel mQSPanel;
 
+    private boolean mShow4G;
+
     // top bar
     BaseStatusBarHeader mHeader;
     protected KeyguardStatusBarView mKeyguardStatusBar;
@@ -492,14 +494,29 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
             resolver.registerContentObserver(Settings.System.getUriFor(
                     Settings.System.QS_TILE_TITLE_VISIBILITY),
                     false, this, UserHandle.USER_ALL);
+            resolver.registerContentObserver(Settings.System.getUriFor(
+                    Settings.System.SHOW_FOURG), false, this, UserHandle.USER_ALL);
             update();
         }
 
         @Override
         public void onChange(boolean selfChange, Uri uri) {
+            if (uri.equals(Settings.System.getUriFor(
+                    Settings.System.SHOW_FOURG))) {
+                    mShow4G = Settings.System.getIntForUser(
+                            mContext.getContentResolver(),
+                            Settings.System.SHOW_FOURG,
+                            0, UserHandle.USER_CURRENT) == 1;
+                updateRowStates();
+                updateSpeedbump();
+                updateClearAll();
+                updateEmptyShadeView();
+            }
+
             update();
         }
 
+        @Override
         public void update() {
             ContentResolver resolver = mContext.getContentResolver();
             int mode = Settings.System.getIntForUser(mContext.getContentResolver(),
@@ -514,6 +531,9 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
             if (mHeader != null) {
                 mHeader.updateSettings();
             }
+
+            boolean mShow4G = Settings.System.getIntForUser(resolver,
+                    Settings.System.SHOW_FOURG, 0, UserHandle.USER_CURRENT) == 1;
         }
     }
 
